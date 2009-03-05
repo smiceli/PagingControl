@@ -1,0 +1,8 @@
+//
+// Prefix header for all source files of the 'HTMLRef' target in the 'HTMLRef' project
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+    #import <UIKit/UIKit.h>
+#endif
