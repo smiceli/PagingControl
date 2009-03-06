@@ -26,6 +26,7 @@ NSString *kRestoreLocationKey = @"restoreLocation";
 
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
+#if 0
 	NSDictionary *savedLocationDict = [NSDictionary dictionaryWithObjectsAndKeys:
                                        0, kRestoreLocationKey,
                                        0, kRestoreWebViewLocationKey,
@@ -36,12 +37,14 @@ NSString *kRestoreLocationKey = @"restoreLocation";
 
     [self initializeDatabase];
     
-	savedLocation = [[NSUserDefaults standardUserDefaults] objectForKey:kRestoreLocationKey];;
+	savedLocation = [[NSUserDefaults standardUserDefaults] objectForKey:kRestoreLocationKey];
     if(self.savedLocation && [self.savedLocation intValue] >= 0)
         [(RootViewController*)navigationController.topViewController restoreLocation:[savedLocation intValue]];
     else
         self.savedLocation = [NSNumber numberWithInt:-1];
 
+#endif
+    
 	// Configure and show the window
 	[window addSubview:[navigationController view]];
 	[window makeKeyAndVisible];
@@ -49,6 +52,7 @@ NSString *kRestoreLocationKey = @"restoreLocation";
 
 
 - (void)applicationWillTerminate:(UIApplication *)application {
+#if 0
 	[[NSUserDefaults standardUserDefaults] setObject:savedLocation forKey:kRestoreLocationKey];
     
     [tagArray makeObjectsPerformSelector:@selector(dehydrate)];
@@ -56,10 +60,13 @@ NSString *kRestoreLocationKey = @"restoreLocation";
     if (sqlite3_close(database) != SQLITE_OK) {
         NSAssert1(0, @"Error: failed to close database with message '%s'.", sqlite3_errmsg(database));
     }
+#endif
 }
 
 -(void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
+#if 0
     [tagArray makeObjectsPerformSelector:@selector(dehydrate)];
+#endif
 }
 
 -(void)dealloc {

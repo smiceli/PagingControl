@@ -16,6 +16,11 @@
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
 		28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
 		E60A6D540F2A7C9C00E86EC5 /* TopicView.m in Sources */ = {isa = PBXBuildFile; fileRef = E60A6D530F2A7C9C00E86EC5 /* TopicView.m */; };
+		E67C21A70F5F804E00566D82 /* BookCover.xib in Resources */ = {isa = PBXBuildFile; fileRef = E67C21A60F5F804E00566D82 /* BookCover.xib */; };
+		E67C21C10F5F84B200566D82 /* BookCoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = E67C21C00F5F84B200566D82 /* BookCoverView.m */; };
+		E67C21CB0F5F88E900566D82 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E67C21C90F5F88E900566D82 /* OpenGLES.framework */; };
+		E67C21CC0F5F88E900566D82 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E67C21CA0F5F88E900566D82 /* QuartzCore.framework */; };
+		E67C22580F5FB05400566D82 /* BookCoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E67C22570F5FB05400566D82 /* BookCoverViewController.m */; };
 		E69229DC0F0C18C1003AEF46 /* HTMLTagItem.m in Sources */ = {isa = PBXBuildFile; fileRef = E69229DB0F0C18C1003AEF46 /* HTMLTagItem.m */; };
 		E6922AB50F0D37CF003AEF46 /* HTMLDetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E6922AB40F0D37CF003AEF46 /* HTMLDetailView.xib */; };
 		E6922ABE0F0D38C7003AEF46 /* HTMLDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6922ABD0F0D38C7003AEF46 /* HTMLDetailController.m */; };
@@ -23,6 +28,8 @@
 		E6922CC20F0FED54003AEF46 /* database.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = E6922CC10F0FED54003AEF46 /* database.sqlite */; };
 		E6BB571A0F27CCAE000308B2 /* TopicTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E6BB57190F27CCAE000308B2 /* TopicTableViewCell.m */; };
 		E6BE67830F1BE4AC00731BE2 /* UIWebView+CTMScrollTo.m in Sources */ = {isa = PBXBuildFile; fileRef = E6BE67820F1BE4AC00731BE2 /* UIWebView+CTMScrollTo.m */; };
+		E6C269B80F60CEFE00994F0B /* PVector.m in Sources */ = {isa = PBXBuildFile; fileRef = E6C269B30F60CEFE00994F0B /* PVector.m */; };
+		E6C269BA0F60CEFE00994F0B /* Page.m in Sources */ = {isa = PBXBuildFile; fileRef = E6C269B70F60CEFE00994F0B /* Page.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +49,13 @@
 		E60A6D520F2A7C9C00E86EC5 /* TopicView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopicView.h; sourceTree = "<group>"; };
 		E60A6D530F2A7C9C00E86EC5 /* TopicView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopicView.m; sourceTree = "<group>"; };
 		E64596C10F1E85FA0097980C /* Defs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Defs.h; sourceTree = "<group>"; };
+		E67C21A60F5F804E00566D82 /* BookCover.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BookCover.xib; sourceTree = "<group>"; };
+		E67C21BF0F5F84B200566D82 /* BookCoverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookCoverView.h; sourceTree = "<group>"; };
+		E67C21C00F5F84B200566D82 /* BookCoverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookCoverView.m; sourceTree = "<group>"; };
+		E67C21C90F5F88E900566D82 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		E67C21CA0F5F88E900566D82 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		E67C22560F5FB05400566D82 /* BookCoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookCoverViewController.h; sourceTree = "<group>"; };
+		E67C22570F5FB05400566D82 /* BookCoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookCoverViewController.m; sourceTree = "<group>"; };
 		E69229DA0F0C18C1003AEF46 /* HTMLTagItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTMLTagItem.h; sourceTree = "<group>"; };
 		E69229DB0F0C18C1003AEF46 /* HTMLTagItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTMLTagItem.m; sourceTree = "<group>"; };
 		E6922AB40F0D37CF003AEF46 /* HTMLDetailView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HTMLDetailView.xib; sourceTree = "<group>"; };
@@ -54,6 +68,10 @@
 		E6BB57190F27CCAE000308B2 /* TopicTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopicTableViewCell.m; sourceTree = "<group>"; };
 		E6BE67810F1BE4AC00731BE2 /* UIWebView+CTMScrollTo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWebView+CTMScrollTo.h"; sourceTree = "<group>"; };
 		E6BE67820F1BE4AC00731BE2 /* UIWebView+CTMScrollTo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+CTMScrollTo.m"; sourceTree = "<group>"; };
+		E6C269B20F60CEFE00994F0B /* PVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PVector.h; path = ../PageFlip/PVector.h; sourceTree = SOURCE_ROOT; };
+		E6C269B30F60CEFE00994F0B /* PVector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PVector.m; path = ../PageFlip/PVector.m; sourceTree = SOURCE_ROOT; };
+		E6C269B60F60CEFE00994F0B /* Page.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Page.h; path = ../PageFlip/Page.h; sourceTree = SOURCE_ROOT; };
+		E6C269B70F60CEFE00994F0B /* Page.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Page.m; path = ../PageFlip/Page.m; sourceTree = SOURCE_ROOT; };
 		E6CECBA60F252A2E0082283E /* ColorNames.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = ColorNames.html; path = HTML/ColorNames.html; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -66,6 +84,8 @@
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */,
 				E6922CBF0F0FED21003AEF46 /* libsqlite3.0.dylib in Frameworks */,
+				E67C21CB0F5F88E900566D82 /* OpenGLES.framework in Frameworks */,
+				E67C21CC0F5F88E900566D82 /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +95,10 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				E6C269B20F60CEFE00994F0B /* PVector.h */,
+				E6C269B30F60CEFE00994F0B /* PVector.m */,
+				E6C269B60F60CEFE00994F0B /* Page.h */,
+				E6C269B70F60CEFE00994F0B /* Page.m */,
 				1D3623240D0F684500981E51 /* HTMLRefAppDelegate.h */,
 				1D3623250D0F684500981E51 /* HTMLRefAppDelegate.m */,
 				E60A6D520F2A7C9C00E86EC5 /* TopicView.h */,
@@ -90,6 +114,10 @@
 				E64596C10F1E85FA0097980C /* Defs.h */,
 				E6BB57180F27CCAE000308B2 /* TopicTableViewCell.h */,
 				E6BB57190F27CCAE000308B2 /* TopicTableViewCell.m */,
+				E67C21BF0F5F84B200566D82 /* BookCoverView.h */,
+				E67C21C00F5F84B200566D82 /* BookCoverView.m */,
+				E67C22560F5FB05400566D82 /* BookCoverViewController.h */,
+				E67C22570F5FB05400566D82 /* BookCoverViewController.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -129,6 +157,7 @@
 			children = (
 				E6922CC10F0FED54003AEF46 /* database.sqlite */,
 				2899E55F0DE3E45000AC0155 /* RootViewController.xib */,
+				E67C21A60F5F804E00566D82 /* BookCover.xib */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				E6922AB40F0D37CF003AEF46 /* HTMLDetailView.xib */,
@@ -139,6 +168,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E67C21C90F5F88E900566D82 /* OpenGLES.framework */,
+				E67C21CA0F5F88E900566D82 /* QuartzCore.framework */,
 				E6922CBE0F0FED20003AEF46 /* libsqlite3.0.dylib */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
@@ -209,6 +240,7 @@
 				2899E5600DE3E45000AC0155 /* RootViewController.xib in Resources */,
 				E6922AB50F0D37CF003AEF46 /* HTMLDetailView.xib in Resources */,
 				E6922CC20F0FED54003AEF46 /* database.sqlite in Resources */,
+				E67C21A70F5F804E00566D82 /* BookCover.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,6 +259,10 @@
 				E6BE67830F1BE4AC00731BE2 /* UIWebView+CTMScrollTo.m in Sources */,
 				E6BB571A0F27CCAE000308B2 /* TopicTableViewCell.m in Sources */,
 				E60A6D540F2A7C9C00E86EC5 /* TopicView.m in Sources */,
+				E67C21C10F5F84B200566D82 /* BookCoverView.m in Sources */,
+				E67C22580F5FB05400566D82 /* BookCoverViewController.m in Sources */,
+				E6C269B80F60CEFE00994F0B /* PVector.m in Sources */,
+				E6C269BA0F60CEFE00994F0B /* Page.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
