@@ -12,6 +12,8 @@
 #import <OpenGLES/ES1/gl.h>
 #import <OpenGLES/ES1/glext.h>
 
+#import "PVector.h"
+
 @class Page;
 
 /*
@@ -37,11 +39,12 @@
     NSTimer *animationTimer;
     NSTimeInterval animationInterval;
     
-    CGPoint position;
     double angle;
     
     CGSize meshSize;
     Page *page;
+    GLushort *indicies;
+    PVector *normals;
 }
 
 @property NSTimeInterval animationInterval;

@@ -15,10 +15,16 @@
 #define USE_DEPTH_BUFFER 1
 
 typedef struct {
-    CGFloat r, g, b, a;
+    GLubyte r, g, b, a;
 } BlockColor;
 
 BlockColor *blockColors;
+
+PVector normal3(PVector a, PVector b, PVector o) {
+    a = vsub(a, o);
+    b = vsub(b, o);
+    return vnormalize(crossProduct(a, b));
+}
 
 // A class extension to declare private methods
 @interface BookCoverView ()
@@ -63,32 +69,38 @@ BlockColor *blockColors;
             return nil;
         }
         
-        animationInterval = 1.0 / 60.0;
+        animationInterval = 1.0 / 30.0;
 
-        meshSize = CGSizeMake(10, 10);
-        blockColors = (BlockColor*)malloc(meshSize.width*meshSize.height*sizeof(*blockColors)*2);
+        meshSize = CGSizeMake(10, 20);
+        
+#pragma mark Color Code
+        blockColors = malloc((int)((meshSize.width-1)*(meshSize.height-1)*sizeof(*blockColors)));
+        BlockColor *c = blockColors;
         for(int y = 0; y < meshSize.height; y++) {
             for(int x = 0; x < meshSize.width; x++) {
-                int ci = 2*y*meshSize.width+x;
-#if 0
-                blockColors[ci].r = 1.0;
-                blockColors[ci].g = 0;
-                blockColors[ci].b = 0;
-#else
-                blockColors[ci].r = rand()/(float)RAND_MAX;
-                blockColors[ci].g = rand()/(float)RAND_MAX;
-                blockColors[ci].b = rand()/(float)RAND_MAX;
-                blockColors[ci].a = 1.0;
-                
-                blockColors[ci+(int)meshSize.width].r = blockColors[ci].r;
-                blockColors[ci+(int)meshSize.width].g = blockColors[ci].g;
-                blockColors[ci+(int)meshSize.width].b = blockColors[ci].b;
-                blockColors[ci+(int)meshSize.width].a = 1.0;
-
-#endif
+                c->r = rand()/(float)RAND_MAX*255;
+                c->g = rand()/(float)RAND_MAX*255;
+                c->b = rand()/(float)RAND_MAX*255;
+                c++;
             }
         }
-        page = [[Page alloc] initWithSize:CGSizeMake(1.0, 1.5) andMeshSize:meshSize];    
+
+        normals = malloc((int)(meshSize.width*meshSize.height*sizeof(*normals)));
+        indicies = malloc((int)((meshSize.width-1)*(meshSize.height-1)*sizeof(*indicies))*6);
+        GLushort *index = indicies;
+        for(int y = 0; y < meshSize.height-1; y++) {
+            for(int x = 0; x < meshSize.width-1; x++) {
+                *index++ = y*(int)meshSize.width+x;
+                *index++ = (y+1)*(int)meshSize.width+x;
+                *index++ = y*(int)meshSize.width+(x+1);
+
+                *index++ = (y+1)*(int)meshSize.width+x;
+                *index++ = (y+1)*(int)meshSize.width+(x+1);
+                *index++ = y*(int)meshSize.width+(x+1);
+            }
+        }
+        
+        page = [[Page alloc] initWithSize:CGSizeMake(1.5*2, 2.0*3) andMeshSize:meshSize];    
         
 #if 0
         UIImage *image = [UIImage imageNamed:@"ethan.jpg"];
@@ -112,13 +124,6 @@ BlockColor *blockColors;
 
 
 -(void)prepareOpenGL {
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glFrustumf(-1.0, 1.0, -1.5, 1.5, 1, 6);
-    glMatrixMode(GL_MODELVIEW);
-    
-    glTranslatef(0, 0, -2);
-    
     glEnable(GL_LIGHTING);
     
     GLfloat global_ambient[] = { .4, .4, .4, .4 };
@@ -130,7 +135,7 @@ BlockColor *blockColors;
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
     //    GLfloat specularLight[] = { 0.4f, 0.4f, 0.4, 1.0f };
     //    glLightfv(GL_LIGHT0, GL_SPECULAR, specularLight);
-    PVector vposition = { -1.5, 1.5, 1.5};
+    PVector vposition = { -1.5, .25, 0};
     GLfloat lightPosition[4];
     lightPosition[0] = vposition.x;
     lightPosition[1] = vposition.y;
@@ -145,19 +150,10 @@ BlockColor *blockColors;
     direction[1] = vdirection.y;
     direction[2] = vdirection.z;
     direction[3] = 1.0;
-    glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, direction);
-    glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 45);
+//    glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, direction);
+//    glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 30);
     glEnable(GL_LIGHT0);
-    
-#if 0
-    float mcolor[] = { 1.0, 1.0, 1.0, 0 };
-    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, mcolor);
-    //    glMaterialfv(GL_BACK, GL_AMBIENT_AND_DIFFUSE, mcolor);
-#endif
-    
     glEnable(GL_COLOR_MATERIAL);
-//    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-    //    glColorMaterial(GL_BACK, GL_AMBIENT_AND_DIFFUSE);
 
 #if 0
     if(imageTexture) {
@@ -168,12 +164,6 @@ BlockColor *blockColors;
         glRotatef(90, 0, 0, 1);
     }
 #endif
-    
-//    glEnable(GL_DEPTH);
-    glEnable(GL_DEPTH_TEST);
-    glFrontFace(GL_CCW);
-    
-    [self performSelector:@selector(update:) withObject:nil afterDelay:0.1];
 }
 
 #if 0
@@ -291,11 +281,7 @@ BlockColor *blockColors;
 }
 #endif
 
-#if 1
 - (void)drawView {
-    
-    // Replace the implementation of this method to do your own custom drawing
-    
     [EAGLContext setCurrentContext:context];
     
     glBindFramebufferOES(GL_FRAMEBUFFER_OES, viewFramebuffer);
@@ -303,66 +289,45 @@ BlockColor *blockColors;
     
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-//    glOrthof(-1.0f, 1.0f, -1.5f, 1.5f, -1.0f, 1.0f);
-    glFrustumf(-1.0, 1.0, -1.5, 1.5, 1.0-.0001, 6);
+    glFrustumf(-1.0, 1.0, -1.5, 1.5, 2.5, 200);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glTranslatef(position.x, position.y, -1.0f);
-    glRotatef(angle, 0, 0, 1);
-    
+    glTranslatef(0, -2.5, -7.5f);
+  
+    glEnable(GL_DEPTH_TEST);
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     
-    glColor4ub(255, 0, 0, 255);
+#pragma mark Drawing Code
 
-    Particle *c = [page particles];
-    CGFloat vertecies[(int)meshSize.width*2*3];
-    for(int y = 0; y < meshSize.height-1; y++) {
-        CGFloat *v = vertecies;
+    [page updateParticles:animationInterval*5];
+    Particle *p = [page particles];
+    PVector vertecies[(int)(meshSize.width*meshSize.height)];
+    PVector *v = vertecies;
+    PVector *n = normals;
+    for(int y = 0; y < meshSize.height; y++) {
         for(int x = 0; x < meshSize.width; x++) {
-            Particle *p = c;
-            for(int i = 0; i < 2; i++) {
-                *v++ = p->p.x;
-                *v++ = p->p.y;
-                *v++ = p->p.z;
-                p += (int)meshSize.width;
-            }
-            c++;
+            *v++ = p->p;
+            if(x != meshSize.width-1 || y != meshSize.height-1)
+                *n++ = normal3((p+(int)meshSize.width)->p, (p+1)->p, p->p);
+            else
+                *n++ = normal3((p-(int)meshSize.width)->p, (p-1)->p, p->p);
+            p++;
         }
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glVertexPointer(3, GL_FLOAT, 0, vertecies);
-        glEnableClientState(GL_COLOR_ARRAY);
-        glColorPointer(4, GL_FLOAT, 0, blockColors+2*y*(int)meshSize.width);
-        
-        int n = meshSize.width*2;
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, n);
     }
-#if 0
-    const GLfloat squareVertices[] = {
-        -0.5f, -0.5f,
-        0.5f,  -0.5f,
-        -0.5f,  0.5f,
-        0.5f,   0.5f,
-    };
-    const GLubyte squareColors[] = {
-        255, 255,   0, 255,
-        0,   255, 255, 255,
-        0,     0,   0,   0,
-        255,   0, 255, 255,
-    };
-    
-    glVertexPointer(2, GL_FLOAT, 0, squareVertices);
+
     glEnableClientState(GL_VERTEX_ARRAY);
-    glColorPointer(4, GL_UNSIGNED_BYTE, 0, squareColors);
+    glVertexPointer(3, GL_FLOAT, 0, vertecies);
     glEnableClientState(GL_COLOR_ARRAY);
+    glColorPointer(4, GL_UNSIGNED_BYTE, 0, blockColors);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glNormalPointer(GL_FLOAT, 0, normals);
     
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-#endif
+    glDrawElements(GL_TRIANGLES, (int)(meshSize.width-1)*(meshSize.height-1)*6, GL_UNSIGNED_SHORT, indicies);
     
     glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
     [context presentRenderbuffer:GL_RENDERBUFFER_OES];
 }
-#endif
 
 
 - (void)layoutSubviews {
@@ -397,6 +362,8 @@ BlockColor *blockColors;
         NSLog(@"failed to make complete framebuffer object %x", glCheckFramebufferStatusOES(GL_FRAMEBUFFER_OES));
         return NO;
     }
+    
+    [self prepareOpenGL];
     
     return YES;
 }
@@ -442,10 +409,25 @@ BlockColor *blockColors;
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    UITouch *touch = [touches anyObject];
-    position = [touch locationInView:self];
-    position.x = position.x/backingWidth*2.0-1.0;
-    position.y = -(position.y/backingHeight*3.0-1.5);
+    UITouch *aTouch = [touches anyObject];
+    CGPoint point = [aTouch locationInView:self];
+    CGPoint prevPoint = [aTouch previousLocationInView:self];
+    CGFloat vx = point.x-prevPoint.x;
+    if(vx > 0) point.x += 80;
+    else point.x -= 80;
+    PVector position;
+    position.x = point.x/backingWidth*2.0-1.0;
+    position.y = point.y/backingHeight*3.0-1.5;
+    CGFloat x = position.x;
+    x /= 0.75;
+    if(fabs(x) > 1.0) x = x > 0 ? 1.0 : -1.0;
+    position.z = sqrt(fabs((1.0 - x*x/1.0)*.90));
+    // x moves from -3 to 3 as the page is being flopped over.
+    // This is in the coordinates of the particles.
+    position.x *= 3;
+    // y will stay 0 to 3.
+    posiiton.y = position.y+1.5;
+    [page pullAtPoint:position];
 }
 
 
