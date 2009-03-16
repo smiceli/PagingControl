@@ -20,12 +20,6 @@ typedef struct {
 
 BlockColor *blockColors;
 
-PVector normal3(PVector a, PVector b, PVector o) {
-    a = vsub(a, o);
-    b = vsub(b, o);
-    return vnormalize(crossProduct(a, b));
-}
-
 // A class extension to declare private methods
 @interface BookCoverView ()
 
@@ -413,11 +407,12 @@ PVector normal3(PVector a, PVector b, PVector o) {
     CGPoint point = [aTouch locationInView:self];
     CGPoint prevPoint = [aTouch previousLocationInView:self];
     CGFloat vx = point.x-prevPoint.x;
-    if(vx > 0) point.x += 80;
-    else point.x -= 80;
+//    NSLog(@"%f", vx);
+    if(vx > 0) point.x += 40 + vx*6;
+    else point.x -= 40 - vx*6;
     PVector position;
     position.x = point.x/backingWidth*2.0-1.0;
-    position.y = point.y/backingHeight*3.0-1.5;
+    position.y = (backingHeight-point.y)/backingHeight*2.0-1.0;
     CGFloat x = position.x;
     x /= 0.75;
     if(fabs(x) > 1.0) x = x > 0 ? 1.0 : -1.0;
@@ -425,8 +420,8 @@ PVector normal3(PVector a, PVector b, PVector o) {
     // x moves from -3 to 3 as the page is being flopped over.
     // This is in the coordinates of the particles.
     position.x *= 3;
-    // y will stay 0 to 3.
-    posiiton.y = position.y+1.5;
+    // y will stay -3 to 3.
+    position.y = (position.y + 1.0) * 3;
     [page pullAtPoint:position];
 }
 
