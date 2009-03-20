@@ -62,7 +62,7 @@
 		E6922ABC0F0D38C7003AEF46 /* HTMLDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTMLDetailController.h; sourceTree = "<group>"; };
 		E6922ABD0F0D38C7003AEF46 /* HTMLDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTMLDetailController.m; sourceTree = "<group>"; };
 		E6922CBE0F0FED20003AEF46 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
-		E6922CC10F0FED54003AEF46 /* database.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = database.sqlite; sourceTree = "<group>"; };
+		E6922CC10F0FED54003AEF46 /* database.sqlite */ = {isa = PBXFileReference; lastKnownFileType = text; path = database.sqlite; sourceTree = "<group>"; };
 		E6BB56CC0F267221000308B2 /* CData.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = CData.html; path = HTML/CData.html; sourceTree = "<group>"; };
 		E6BB57180F27CCAE000308B2 /* TopicTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopicTableViewCell.h; sourceTree = "<group>"; };
 		E6BB57190F27CCAE000308B2 /* TopicTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopicTableViewCell.m; sourceTree = "<group>"; };

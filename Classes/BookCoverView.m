@@ -172,7 +172,7 @@ BlockColor *blockColors;
     
     [self prepareOpenGL];
     
-    [page updateParticles:0.05];
+    [page updateParticles:animationInterval];
     
 #if 0
     int neighbors[] = {
@@ -294,7 +294,8 @@ BlockColor *blockColors;
     
 #pragma mark Drawing Code
 
-    [page updateParticles:animationInterval*5];
+    [page updateParticles:animationInterval*4];
+    
     Particle *p = [page particles];
     PVector vertecies[(int)(meshSize.width*meshSize.height)];
     PVector *v = vertecies;
@@ -407,16 +408,16 @@ BlockColor *blockColors;
     CGPoint point = [aTouch locationInView:self];
     CGPoint prevPoint = [aTouch previousLocationInView:self];
     CGFloat vx = point.x-prevPoint.x;
-//    NSLog(@"%f", vx);
-    if(vx > 0) point.x += 40 + vx*6;
-    else point.x -= 40 - vx*6;
+    CGFloat moveAhead = 40 + powf(fabs(vx), 2.2);
+    if(vx > 0) point.x += moveAhead;
+    else point.x -= moveAhead;
     PVector position;
     position.x = point.x/backingWidth*2.0-1.0;
     position.y = (backingHeight-point.y)/backingHeight*2.0-1.0;
     CGFloat x = position.x;
     x /= 0.75;
     if(fabs(x) > 1.0) x = x > 0 ? 1.0 : -1.0;
-    position.z = sqrt(fabs((1.0 - x*x/1.0)*.90));
+    position.z = sqrtf(fabs((1.0 - x*x/1.0)*.90));
     // x moves from -3 to 3 as the page is being flopped over.
     // This is in the coordinates of the particles.
     position.x *= 3;
