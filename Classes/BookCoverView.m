@@ -11,6 +11,7 @@
 
 #import "BookCoverView.h"
 #import "Page.h"
+#import "UIView+CTMImage.h"
 
 #define USE_DEPTH_BUFFER 1
 
@@ -28,7 +29,9 @@ BlockColor *blockColors;
 
 - (BOOL) createFramebuffer;
 - (void) destroyFramebuffer;
+- (void) layoutPaper;
 - (void) prepareOpenGL;
+- (void) drawBackground;
 
 @end
 
@@ -38,6 +41,7 @@ BlockColor *blockColors;
 @synthesize context;
 @synthesize animationTimer;
 @synthesize animationInterval;
+@synthesize behindView;
 
 
 // You must implement this method
@@ -48,72 +52,78 @@ BlockColor *blockColors;
 //The GL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:
 - (id)initWithCoder:(NSCoder*)coder {
     
-    if ((self = [super initWithCoder:coder])) {
-        // Get the layer
-        CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
-        
-        eaglLayer.opaque = YES;
-        eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
-                                        [NSNumber numberWithBool:NO], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
-        
-        context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
-        
-        if (!context || ![EAGLContext setCurrentContext:context]) {
-            [self release];
-            return nil;
-        }
-        
-        animationInterval = 1.0 / 30.0;
+    if(!(self = [super initWithCoder:coder])) return nil;
 
-        meshSize = CGSizeMake(10, 20);
-        
-#pragma mark Color Code
-        blockColors = malloc((int)((meshSize.width-1)*(meshSize.height-1)*sizeof(*blockColors)));
-        BlockColor *c = blockColors;
-        for(int y = 0; y < meshSize.height; y++) {
-            for(int x = 0; x < meshSize.width; x++) {
-                c->r = rand()/(float)RAND_MAX*255;
-                c->g = rand()/(float)RAND_MAX*255;
-                c->b = rand()/(float)RAND_MAX*255;
-                c++;
-            }
-        }
-
-        normals = malloc((int)(meshSize.width*meshSize.height*sizeof(*normals)));
-        indicies = malloc((int)((meshSize.width-1)*(meshSize.height-1)*sizeof(*indicies))*6);
-        GLushort *index = indicies;
-        for(int y = 0; y < meshSize.height-1; y++) {
-            for(int x = 0; x < meshSize.width-1; x++) {
-                *index++ = y*(int)meshSize.width+x;
-                *index++ = (y+1)*(int)meshSize.width+x;
-                *index++ = y*(int)meshSize.width+(x+1);
-
-                *index++ = (y+1)*(int)meshSize.width+x;
-                *index++ = (y+1)*(int)meshSize.width+(x+1);
-                *index++ = y*(int)meshSize.width+(x+1);
-            }
-        }
-        
-        page = [[Page alloc] initWithSize:CGSizeMake(1.5*2, 2.0*3) andMeshSize:meshSize];    
-        
-#if 0
-        UIImage *image = [UIImage imageNamed:@"ethan.jpg"];
-        if(!image) return;
-        
-        
-        NSImageRep *imageRep = [image bestRepresentationForDevice:nil];
-        if(![imageRep isKindOfClass:[NSBitmapImageRep class]]) return;
-        
-        NSBitmapImageRep *bitmapImageRep = (NSBitmapImageRep*)imageRep;
-        glGenTextures(1, &imageTexture);
-        [bitmapImageRep copyToGLTexture:imageTexture];
-#endif
-        
-        //    mouseParticle = &[page particles][(int)(meshSize.width*(meshSize.height-1)/2+meshSize.width-1)];
-        //    mouseParticle2 = mouseParticle + (int)meshSize.width;
-        
+    // Get the layer
+    CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
+    
+    eaglLayer.opaque = YES;
+    eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    [NSNumber numberWithBool:NO], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
+    
+    context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
+    
+    if (!context || ![EAGLContext setCurrentContext:context]) {
+        [self release];
+        return nil;
     }
+    
+    animationInterval = 1.0 / 30.0;
     return self;
+}
+
+-(void) layoutPaper {
+    meshSize = CGSizeMake(10, 20);
+    
+#pragma mark Color Code
+    blockColors = malloc((int)((meshSize.width-1)*(meshSize.height-1)*sizeof(*blockColors)));
+    BlockColor *c = blockColors;
+    for(int y = 0; y < meshSize.height; y++) {
+        for(int x = 0; x < meshSize.width; x++) {
+            c->r = rand()/(float)RAND_MAX*255;
+            c->g = rand()/(float)RAND_MAX*255;
+            c->b = rand()/(float)RAND_MAX*255;
+            c++;
+        }
+    }
+
+    normals = malloc((int)(meshSize.width*meshSize.height*sizeof(*normals)));
+    indicies = malloc((int)((meshSize.width-1)*(meshSize.height-1)*sizeof(*indicies))*6);
+    GLushort *index = indicies;
+    for(int y = 0; y < meshSize.height-1; y++) {
+        for(int x = 0; x < meshSize.width-1; x++) {
+            *index++ = y*(int)meshSize.width+x;
+            *index++ = (y+1)*(int)meshSize.width+x;
+            *index++ = y*(int)meshSize.width+(x+1);
+
+            *index++ = (y+1)*(int)meshSize.width+x;
+            *index++ = (y+1)*(int)meshSize.width+(x+1);
+            *index++ = y*(int)meshSize.width+(x+1);
+        }
+    }
+    
+    glViewCoords = CGRectMake(-backingWidth/2.0, -backingHeight/2.0, backingWidth, backingHeight);
+ 
+    viewFront = backingHeight*10;
+    paperZ = viewFront + backingHeight;
+    double newW = ((backingWidth/2.0)/viewFront)*paperZ;
+    double newH = ((backingHeight/2.0)/viewFront)*paperZ;
+    modelCoords = CGRectMake(-newW, -newH, newW*2, newH*2);
+    
+    page = [[Page alloc] initWithSize:modelCoords.size andMeshSize:meshSize];    
+    
+#if 0
+    UIImage *image = [UIImage imageNamed:@"ethan.jpg"];
+    if(!image) return;
+    
+    
+    NSImageRep *imageRep = [image bestRepresentationForDevice:nil];
+    if(![imageRep isKindOfClass:[NSBitmapImageRep class]]) return;
+    
+    NSBitmapImageRep *bitmapImageRep = (NSBitmapImageRep*)imageRep;
+    glGenTextures(1, &imageTexture);
+    [bitmapImageRep copyToGLTexture:imageTexture];
+#endif
 }
 
 
@@ -275,6 +285,44 @@ BlockColor *blockColors;
 }
 #endif
 
+-(void)drawBackground {
+    if(!behindView) return;
+    
+    glEnable(GL_TEXTURE_2D);
+    if(!behindTexture) {
+        glGenTextures(1, &behindTexture);
+        [behindView copyToGLTexture:behindTexture putTextureCoordsIn:&behindTextureCoords];
+    }
+    
+    GLfloat squareVertices[8];
+    squareVertices[0] = CGRectGetMinX(modelCoords);
+    squareVertices[1] = CGRectGetMinY(modelCoords);
+    squareVertices[2] = CGRectGetMaxX(modelCoords);
+    squareVertices[3] = CGRectGetMinY(modelCoords);
+    squareVertices[4] = CGRectGetMinX(modelCoords);
+    squareVertices[5] = CGRectGetMaxY(modelCoords);
+    squareVertices[6] = CGRectGetMaxX(modelCoords);
+    squareVertices[7] = CGRectGetMaxY(modelCoords);
+    
+    const GLfloat textureCoords[] = {
+        behindTextureCoords.origin.x, behindTextureCoords.origin.y,
+        behindTextureCoords.size.width, behindTextureCoords.origin.y,
+        behindTextureCoords.origin.x, behindTextureCoords.size.height,
+        behindTextureCoords.size.width, behindTextureCoords.size.height
+    };
+    glPushMatrix();
+    glTranslatef(0, 0, -paperZ-.1);
+    glVertexPointer(2, GL_FLOAT, 0, squareVertices);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glTexCoordPointer(2, GL_FLOAT, 0, textureCoords);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glPopMatrix();
+    
+    glDisable(GL_TEXTURE_2D);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+}
+
 - (void)drawView {
     [EAGLContext setCurrentContext:context];
     
@@ -283,10 +331,9 @@ BlockColor *blockColors;
     
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustumf(-1.0, 1.0, -1.5, 1.5, 2.5, 200);
+    glFrustumf(CGRectGetMinX(glViewCoords), CGRectGetMaxX(glViewCoords), CGRectGetMinY(glViewCoords), CGRectGetMaxY(glViewCoords), viewFront, paperZ+100);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glTranslatef(0, -2.5, -7.5f);
   
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
@@ -294,6 +341,7 @@ BlockColor *blockColors;
     
 #pragma mark Drawing Code
 
+    [self drawBackground];
     [page updateParticles:animationInterval*4];
     
     Particle *p = [page particles];
@@ -311,6 +359,7 @@ BlockColor *blockColors;
         }
     }
 
+    glTranslatef(modelCoords.origin.x, modelCoords.origin.y, -paperZ);
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(3, GL_FLOAT, 0, vertecies);
     glEnableClientState(GL_COLOR_ARRAY);
@@ -319,6 +368,8 @@ BlockColor *blockColors;
     glNormalPointer(GL_FLOAT, 0, normals);
     
     glDrawElements(GL_TRIANGLES, (int)(meshSize.width-1)*(meshSize.height-1)*6, GL_UNSIGNED_SHORT, indicies);
+    
+    glDisableClientState(GL_COLOR_ARRAY);
     
     glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
     [context presentRenderbuffer:GL_RENDERBUFFER_OES];
@@ -329,6 +380,7 @@ BlockColor *blockColors;
     [EAGLContext setCurrentContext:context];
     [self destroyFramebuffer];
     [self createFramebuffer];
+    [self layoutPaper];
     [self drawView];
 }
 
@@ -403,27 +455,51 @@ BlockColor *blockColors;
     }
 }
 
+
+// We are going to try to tack the finger by pulling a spring.
+// One end of the spring will be by the finger and the other
+// end we will calcuate it position so that the finger end ends
+// up by the finger.
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+    // convert touch to view coords
     UITouch *aTouch = [touches anyObject];
     CGPoint point = [aTouch locationInView:self];
     CGPoint prevPoint = [aTouch previousLocationInView:self];
-    CGFloat vx = point.x-prevPoint.x;
-    CGFloat moveAhead = 40 + powf(fabs(vx), 2.2);
-    if(vx > 0) point.x += moveAhead;
-    else point.x -= moveAhead;
-    PVector position;
-    position.x = point.x/backingWidth*2.0-1.0;
-    position.y = (backingHeight-point.y)/backingHeight*2.0-1.0;
-    CGFloat x = position.x;
+    
+    // calculate pull end
+    PVector pullEnd;
+    pullEnd.x = point.x;
+    pullEnd.y = point.y;
+    
+    // ... calculate z based on x scaled to -1..1
+    CGFloat x = (point.x/backingWidth)*2-1;
     x /= 0.75;
     if(fabs(x) > 1.0) x = x > 0 ? 1.0 : -1.0;
-    position.z = sqrtf(fabs((1.0 - x*x/1.0)*.90));
-    // x moves from -3 to 3 as the page is being flopped over.
-    // This is in the coordinates of the particles.
-    position.x *= 3;
-    // y will stay -3 to 3.
-    position.y = (position.y + 1.0) * 3;
-    [page pullAtPoint:position];
+    x = (x+1)/2;
+    pullEnd.z = sqrtf(fabs((1.0 - x*x/1.0)*.90));
+    pullEnd.z = pullEnd.z*glViewCoords.size.width;
+
+    // move pull end ahead to track finger
+    
+    // ... calculate finger velocity
+    CGFloat vx = point.x-prevPoint.x;
+    
+    // ... adjust x to track finger based on velocity
+//    CGFloat moveAhead = 40 + powf(fabs(vx), 2.2);
+    CGFloat moveAhead = 40 + 15*fabs(vx);
+//    moveAhead = 0;
+    if(vx > 1) pullEnd.x += moveAhead;
+    else if(vx < -1) pullEnd.x -= moveAhead;
+    
+    // convert to gl coords
+    pullEnd.x = pullEnd.x/backingWidth*glViewCoords.size.width-glViewCoords.size.width/2.0;
+    pullEnd.y = (backingHeight-pullEnd.y)/backingHeight*glViewCoords.size.height-glViewCoords.size.height/2.0;
+    
+    // convert position to model coords
+    pullEnd.x += glViewCoords.size.width/2.0;
+    pullEnd.y += glViewCoords.size.height/2.0;
+        
+    [page pullAtPoint:pullEnd];
 }
 
 
@@ -435,7 +511,8 @@ BlockColor *blockColors;
         [EAGLContext setCurrentContext:nil];
     }
     
-    [context release];  
+    [context release];
+    [behindView release];
     [super dealloc];
 }
 

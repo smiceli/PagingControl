@@ -26,6 +26,7 @@
 		E6922ABE0F0D38C7003AEF46 /* HTMLDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6922ABD0F0D38C7003AEF46 /* HTMLDetailController.m */; };
 		E6922CBF0F0FED21003AEF46 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E6922CBE0F0FED20003AEF46 /* libsqlite3.0.dylib */; };
 		E6922CC20F0FED54003AEF46 /* database.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = E6922CC10F0FED54003AEF46 /* database.sqlite */; };
+		E6ADC10F0F775616004E9137 /* UIView+CTMImage.m in Sources */ = {isa = PBXBuildFile; fileRef = E6ADC10E0F775616004E9137 /* UIView+CTMImage.m */; };
 		E6BB571A0F27CCAE000308B2 /* TopicTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E6BB57190F27CCAE000308B2 /* TopicTableViewCell.m */; };
 		E6BE67830F1BE4AC00731BE2 /* UIWebView+CTMScrollTo.m in Sources */ = {isa = PBXBuildFile; fileRef = E6BE67820F1BE4AC00731BE2 /* UIWebView+CTMScrollTo.m */; };
 		E6C269B80F60CEFE00994F0B /* PVector.m in Sources */ = {isa = PBXBuildFile; fileRef = E6C269B30F60CEFE00994F0B /* PVector.m */; };
@@ -63,6 +64,8 @@
 		E6922ABD0F0D38C7003AEF46 /* HTMLDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTMLDetailController.m; sourceTree = "<group>"; };
 		E6922CBE0F0FED20003AEF46 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		E6922CC10F0FED54003AEF46 /* database.sqlite */ = {isa = PBXFileReference; lastKnownFileType = text; path = database.sqlite; sourceTree = "<group>"; };
+		E6ADC10D0F775616004E9137 /* UIView+CTMImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+CTMImage.h"; sourceTree = "<group>"; };
+		E6ADC10E0F775616004E9137 /* UIView+CTMImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+CTMImage.m"; sourceTree = "<group>"; };
 		E6BB56CC0F267221000308B2 /* CData.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = CData.html; path = HTML/CData.html; sourceTree = "<group>"; };
 		E6BB57180F27CCAE000308B2 /* TopicTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopicTableViewCell.h; sourceTree = "<group>"; };
 		E6BB57190F27CCAE000308B2 /* TopicTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopicTableViewCell.m; sourceTree = "<group>"; };
@@ -95,6 +98,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				E6ADC10D0F775616004E9137 /* UIView+CTMImage.h */,
+				E6ADC10E0F775616004E9137 /* UIView+CTMImage.m */,
 				E6C269B20F60CEFE00994F0B /* PVector.h */,
 				E6C269B30F60CEFE00994F0B /* PVector.m */,
 				E6C269B60F60CEFE00994F0B /* Page.h */,
@@ -263,6 +268,7 @@
 				E67C22580F5FB05400566D82 /* BookCoverViewController.m in Sources */,
 				E6C269B80F60CEFE00994F0B /* PVector.m in Sources */,
 				E6C269BA0F60CEFE00994F0B /* Page.m in Sources */,
+				E6ADC10F0F775616004E9137 /* UIView+CTMImage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

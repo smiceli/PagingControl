@@ -23,6 +23,8 @@
  */
 @interface BookCoverView : UIView {
     
+    UIView *behindView;
+    
 @private
     /* The pixel dimensions of the backbuffer */
     GLint backingWidth;
@@ -39,15 +41,23 @@
     NSTimer *animationTimer;
     NSTimeInterval animationInterval;
     
-    double angle;
-    
-    CGSize meshSize;
     Page *page;
     GLushort *indicies;
     PVector *normals;
+    CGSize meshSize;
+    
+    CGRect modelCoords;
+    CGPoint glModelPosition;
+    CGRect glViewCoords;
+    CGFloat viewFront;
+    CGFloat paperZ;
+
+    GLuint behindTexture;
+    CGRect behindTextureCoords;
 }
 
 @property NSTimeInterval animationInterval;
+@property (nonatomic, retain) UIView *behindView;
 
 - (void)startAnimation;
 - (void)stopAnimation;

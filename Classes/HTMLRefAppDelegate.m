@@ -34,8 +34,11 @@ NSString *kRestoreLocationKey = @"restoreLocation";
     
 	[[NSUserDefaults standardUserDefaults] registerDefaults:savedLocationDict];
 	[[NSUserDefaults standardUserDefaults] synchronize];
+    
+#endif
 
     [self initializeDatabase];
+#if 0
     
 	savedLocation = [[NSUserDefaults standardUserDefaults] objectForKey:kRestoreLocationKey];
     if(self.savedLocation && [self.savedLocation intValue] >= 0)

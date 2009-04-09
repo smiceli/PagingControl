@@ -8,9 +8,12 @@
 
 #import "BookCoverViewController.h"
 #import "BookCoverView.h"
+#import "RootViewController.h"
 
 
 @implementation BookCoverViewController
+
+@synthesize coveredViewController;
 
 /*
 // The designated initializer. Override to perform setup that is required before the view is loaded.
@@ -25,6 +28,9 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
+    coveredViewController = [[RootViewController alloc] initWithNibName:@"RootViewController" bundle:nil];
+    
+    ((BookCoverView *)self.view).behindView = coveredViewController.view;
     [(BookCoverView *)self.view startAnimation];
 }
 
@@ -38,5 +44,8 @@
     [super dealloc];
 }
 
+-(void)coverHasOpened {
+//    [self.navigationController pushViewController:coveredView animated:NO];
+}
 
 @end

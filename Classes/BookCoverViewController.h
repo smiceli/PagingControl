@@ -10,7 +10,11 @@
 
 
 @interface BookCoverViewController : UIViewController {
-
+    UIViewController *coveredViewController;
 }
+
+@property (nonatomic, retain) UIViewController* coveredViewController;
+
+-(void)coverHasOpened;
 
 @end
