@@ -20,7 +20,7 @@
 #define ROW_HEIGHT 60
 
 - (id)initWithStyle:(UITableViewStyle)style {
-	if (self = [super initWithStyle:style]) {
+	if ((self = [super initWithStyle:style])) {
 		self.tableView.rowHeight = ROW_HEIGHT;
 	}
 	return self;
@@ -92,10 +92,6 @@
     return [[appDelegate tagArray] count];
 }
 
-- (UITableViewCellAccessoryType)tableView:(UITableView *)tv accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath {
-    return UITableViewCellAccessoryDisclosureIndicator;
-}
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return ROW_HEIGHT;
 }
@@ -106,8 +102,10 @@
     static NSString *CellIdentifier = @"Cell";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
-    if(!cell)
-        cell = [[[TopicTableViewCell alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, ROW_HEIGHT) reuseIdentifier:CellIdentifier] autorelease];
+    if(!cell) {
+        cell = [[[TopicTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
     
     // Set up the cell...
     HTMLRefAppDelegate *appDelegate = (HTMLRefAppDelegate *)[[UIApplication sharedApplication] delegate];

@@ -12,9 +12,10 @@
 
 @implementation TopicTableViewCell
 
-- (id)initWithFrame:(CGRect)frame reuseIdentifier:(NSString *)reuseIdentifier {
-    if (self = [super initWithFrame:frame reuseIdentifier:reuseIdentifier]) {
-		CGRect topicViewFrame = CGRectMake(0.0, 0.0, self.contentView.bounds.size.width, self.contentView.bounds.size.height);
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    
+    if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
+		CGRect topicViewFrame = CGRectMake((CGFloat)0.0, (CGFloat)0.0, self.contentView.bounds.size.width, self.contentView.bounds.size.height);
 		topicView = [[TopicView alloc] initWithFrame:topicViewFrame];
 		topicView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		[self.contentView addSubview:topicView];

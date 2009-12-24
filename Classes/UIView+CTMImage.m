@@ -59,7 +59,7 @@ static unsigned nearestPowerOf2(unsigned int x) {
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, [pixels mutableBytes]);
     
-    *textureRect = CGRectMake(0, (textureHeight-self.bounds.size.height)/textureHeight, self.bounds.size.width/textureWidth,1.0);
+    *textureRect = CGRectMake(0, (textureHeight-self.bounds.size.height)/textureHeight, self.bounds.size.width/textureWidth, (CGFloat)1.0);
 }
 
 @end

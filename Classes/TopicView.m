@@ -27,7 +27,7 @@ static UIFont *briefDescriptionFont = nil;
 #define MIN_SECONDARY_FONT_SIZE 10
 
 - (id)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
+    if ((self = [super initWithFrame:frame])) {
         if(!topicFont)
             topicFont = [[UIFont boldSystemFontOfSize:MAIN_FONT_SIZE] retain];
         if(!briefDescriptionFont)

@@ -47,11 +47,13 @@
     CGSize meshSize;
     
     CGRect modelCoords;
-    CGPoint glModelPosition;
     CGRect glViewCoords;
     CGFloat viewFront;
     CGFloat paperZ;
 
+    PVector lightPosition;
+    CGFloat shadowMatrix[16];
+    
     GLuint behindTexture;
     CGRect behindTextureCoords;
 }
