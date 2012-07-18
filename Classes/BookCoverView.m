@@ -484,7 +484,6 @@ BlockColor *blockColors;
 
 
 - (void)setAnimationInterval:(NSTimeInterval)interval {
-    
     animationInterval = interval;
     if (animationTimer) {
         [self stopAnimation];
@@ -520,7 +519,7 @@ BlockColor *blockColors;
     x /= (CGFloat)0.75;
     if(fabsf(x) > 1.0) x = x > 0 ? (CGFloat)1.0 : (CGFloat)-1.0;
     x = (x+1)/2;
-    pullEnd.z = sqrtf(fabsf(((CGFloat)(CGFloat)1.0 - (x*x)/1.0)*(CGFloat).90));
+    pullEnd.z = (CGFloat)sqrtf(fabsf(((CGFloat)(CGFloat)1.0 - (x*x)/1.0)*(CGFloat).90));
     pullEnd.z = pullEnd.z*glViewCoords.size.width;
 
     // move pull end ahead to track finger

@@ -58,7 +58,7 @@
     CGRect behindTextureCoords;
 }
 
-@property NSTimeInterval animationInterval;
+@property (nonatomic, assign) NSTimeInterval animationInterval;
 @property (nonatomic, retain) UIView *behindView;
 
 - (void)startAnimation;
