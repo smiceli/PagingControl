@@ -131,7 +131,7 @@ BlockColor *blockColors;
     PVector a = {modelCoords.size.width, 0, 0};
     PVector b = {0, modelCoords.size.height, 0};
     PVector o = {modelCoords.size.width, modelCoords.size.height, 0};
-    PVector lp = {0, backingHeight*2, paperZ};
+    PVector lp = {-4*backingHeight, backingHeight*2, paperZ};
     CGFloat planeEq[4];
     planeEquation(planeEq, a, b, o);
     fillInPlanarShadowMatrix(shadowMatrix, planeEq, lp);
@@ -386,27 +386,38 @@ BlockColor *blockColors;
 
     glTranslatef(modelCoords.origin.x, modelCoords.origin.y, -paperZ);
 
-//    glPushMatrix();
-//    glMultMatrixf(shadowMatrix);
-//    glDisable(GL_LIGHTING);
+#define SHADOW
+#ifdef SHADOW
+    glPushMatrix();
+    glTranslatef(0, 0, -0.05);
+    glMultMatrixf(shadowMatrix);
+    glDisable(GL_LIGHTING);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+#endif
     
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(3, GL_FLOAT, 0, vertecies);
     glEnableClientState(GL_NORMAL_ARRAY);
     glNormalPointer(GL_FLOAT, 0, normals);
     
-//    glColor4f(0, 0, 0, 0.3);
-  
-//    glDrawElements(GL_TRIANGLES, (int)(meshSize.width-1)*(meshSize.height-1)*6, GL_UNSIGNED_SHORT, indicies);
-    
-//    glPopMatrix();
+#ifdef SHADOW
+    glColor4f(0, 0, 0, 0.3);
+    glDrawElements(GL_TRIANGLES, (int)(meshSize.width-1)*(meshSize.height-1)*6, GL_UNSIGNED_SHORT, indicies);
+    glPopMatrix();
+    glDisable(GL_BLEND);
+#endif
     
     glEnable(GL_LIGHTING);
+
     glEnableClientState(GL_COLOR_ARRAY);
     glColorPointer(4, GL_UNSIGNED_BYTE, 0, blockColors);
+
     glDrawElements(GL_TRIANGLES, (int)(meshSize.width-1)*(meshSize.height-1)*6, GL_UNSIGNED_SHORT, indicies);
     
+    glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_COLOR_ARRAY);
+    glDisableClientState(GL_NORMAL_ARRAY);
     
     glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
     [context presentRenderbuffer:GL_RENDERBUFFER_OES];
